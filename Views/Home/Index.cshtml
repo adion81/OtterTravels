@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model Otter
+
+<form action="/register" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Name:</label>
+        <input asp-for="Name" class="form-control">
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Type">Type:</label>
+        <input asp-for="Type" class="form-control">
+        <span class="text-danger" asp-validation-for="Type"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Birthday">Birthday:</label>
+        <input asp-for="Birthday" class="form-control">
+        <span class="text-danger" asp-validation-for="Birthday"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="HasKids">HasKids:</label>
+        <input asp-for="HasKids" class="form-control">
+        <span class="text-danger" asp-validation-for="HasKids"></span>
+    </div>
+    <input type="submit" value="Add Anotter Otter" class="btn btn-info">
+</form>
+
+<form action="/login" method="post">
+    <div class="form-group">
+        <label >Otter:</label>
+        <select name="OtterId" class="form-control">
+            @foreach(Otter o in ViewBag.Otters)
+            {
+                <option value="@o.OtterId">@o.Name</option>
+            }
+        </select>
+    </div>
+    <input type="submit" value="Login" class="btn btn-success">
+</form>

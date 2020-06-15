@@ -1,0 +1,25 @@
+@model Vacation
+
+<form action="/create/vacation" method="post">
+    <div class="form-group">
+        <label asp-for="Destination">Destination:</label>
+        <input asp-for="Destination" class="form-control">
+        <span class="text-danger" asp-validation-for="Destination"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ImgUrl">Img Url:</label>
+        <input asp-for="ImgUrl" class="form-control">
+        <span class="text-danger" asp-validation-for="ImgUrl"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="StartDate">Start Date:</label>
+        <input asp-for="StartDate" class="form-control">
+        <span class="text-danger" asp-validation-for="StartDate"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NumberDays">Number of Days:</label>
+        <input asp-for="NumberDays" class="form-control">
+        <span class="text-danger" asp-validation-for="NumberDays"></span>
+    </div>
+    <input type="submit" value="Plan an Otter Vacation" class="btn btn-primary">
+</form>
