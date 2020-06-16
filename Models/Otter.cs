@@ -27,5 +27,7 @@ namespace OtterTravels.Models
         // An Otter can plan many vacations
         // Not stored in database.
         public List<Vacation> PlannedVacations { get; set; }
+
+        public List<Association> Tagalongs { get; set; }
     }
 }

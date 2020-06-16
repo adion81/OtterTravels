@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace OtterTravels.Models
@@ -29,6 +30,8 @@ namespace OtterTravels.Models
         // A vacation can have only one Otter that plans it.
         // Not stored in database.
         public Otter Planner { get; set; }
+
+        public List<Association> GroupMembers {get; set;}
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;

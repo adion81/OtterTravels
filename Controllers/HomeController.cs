@@ -127,7 +127,35 @@ namespace OtterTravels.Controllers
                 .FirstOrDefault( o => o.OtterId == otterId);
             ViewBag.myVacays = otterInDb.PlannedVacations
                 .OrderBy(v => v.StartDate).ToList();
-            return View(otterInDb);
+            ViewBag.Otter = otterInDb;
+            List<Vacation> AllTrip = _context.Vacations
+                                            .Include( v => v.GroupMembers  )
+                                            .ThenInclude( a => a.Traveller )
+                                            .Include( v => v.Planner )
+                                            .ToList();
+            return View(AllTrip);
+        }
+
+        [HttpGet("join/{vacationId}/{otterId}")]
+        public IActionResult JoinVacation( int vacationId,int otterId)
+        {
+            Association joining = new Association();
+            joining.VacationId = vacationId;
+            joining.OtterId = otterId;
+            _context.Associations.Add(joining);
+            _context.SaveChanges();
+            return Redirect($"/dashboard/{otterId}");
+
+        }
+
+        [HttpGet("leave/{vacationId}/{otterId}")]
+        public IActionResult LeaveVacation( int vacationId,int otterId)
+        {
+            Association leaving =  _context.Associations.FirstOrDefault( a => a.VacationId == vacationId && a.OtterId == otterId );
+            _context.Associations.Remove(leaving);
+            _context.SaveChanges();
+            return Redirect($"/dashboard/{otterId}");
+
         }
     }
 }
