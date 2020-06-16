@@ -16,6 +16,7 @@ namespace OtterTravels.Models
 
         [Required(ErrorMessage="Start Date is required")]
         [DataType(DataType.Date)]
+        [FutureDate]
         public DateTime StartDate { get; set; }
 
         [Required(ErrorMessage="Duration is required")]

@@ -4,13 +4,17 @@
 <a href="/vacation/new">Plan Vacation</a>
 
 <div class="row">
-    @foreach( Vacation v in Model.PlannedVacations )
+    @foreach( Vacation v in ViewBag.myVacays )
     {
-        <div class="card col-sm-4">
-            <div class="card-header">
-                <h2 class="card-title">@v.Destination</h2>
+        <div class="col-sm-4">
+            <div class="card">
+                <img src="@v.ImgUrl" class="card-img-top" alt="@v.Destination">
+                <div class="card-body">
+                    <h2 class="card-title">@v.Destination</h2>
+                    <p>Start: @v.StartDate</p>
+                    <p>For @v.NumberDays day(s)</p>
+                </div>
             </div>
-            <img src="@v.ImgUrl" class="card-img-top" alt="@v.Destination">
         </div>
     }
 

@@ -77,6 +77,15 @@ namespace OtterTravels.Controllers
             if(ModelState.IsValid)
             {
                 int? otterId = HttpContext.Session.GetInt32("OtterId");
+                List<Vacation> myVacays = _context.Otters
+                    .Include(o => o.PlannedVacations)
+                    .FirstOrDefault(o => o.OtterId == (int) otterId)
+                    .PlannedVacations.ToList();
+                if(IsAlreadyBooked(newVac, myVacays))
+                {
+                    ModelState.AddModelError("StartDate", "You are already on a vacation at this time");
+                    return View("AddVacation");
+                }
                 newVac.OtterId = (int)otterId;
                 _context.Vacations.Add(newVac);
                 _context.SaveChanges();
@@ -89,6 +98,23 @@ namespace OtterTravels.Controllers
             }
         }
 
+        public static bool IsAlreadyBooked(Vacation newVac, List<Vacation> vacations)
+        {
+            DateTime testStart = newVac.StartDate;
+            DateTime testEnd = newVac.StartDate.AddDays(newVac.NumberDays);
+            foreach(var v in vacations)
+            {
+                DateTime start = v.StartDate;
+                DateTime end = v.StartDate.AddDays(v.NumberDays);
+                // no part of the testStart or testEnd can overlap this block of time
+                if(start <= testEnd && testStart <= end)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         [HttpGet("dashboard/{otterId}")]
         public IActionResult Dashboard (int otterId)
         {   
@@ -96,19 +122,12 @@ namespace OtterTravels.Controllers
             {
                 return RedirectToAction("Logout");
             }
-            Otter otterInDb = _context.Otters.Include( o => o.PlannedVacations ).FirstOrDefault( o => o.OtterId == otterId);
+            Otter otterInDb = _context.Otters
+                .Include( o => o.PlannedVacations )
+                .FirstOrDefault( o => o.OtterId == otterId);
+            ViewBag.myVacays = otterInDb.PlannedVacations
+                .OrderBy(v => v.StartDate).ToList();
             return View(otterInDb);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
